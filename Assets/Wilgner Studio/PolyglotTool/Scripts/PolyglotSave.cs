@@ -9,17 +9,15 @@ namespace Polyglot{
 	    public int selectedLanguageCategories;
 
 		public List<Translation> translations = new List<Translation>();
-		public List<string> languages = new List<string>();
+        public List<string> languages = new List<string>();
 	    public List<string> languagesCategories = new List<string>();
+        public List<IdElements> idElements = new List<IdElements>();
 
-		/*
-	    public PolyglotSave(int selectedLanguage, int selectedLanguageCategories, List<Translation> translations, List<string> languages, List<string> languagesCategories)
-	    {
-	        this.selectedLanguage = selectedLanguage;
-	        this.selectedLanguageCategories = selectedLanguageCategories;
-	        this.translations = translations;
-	        this.languages = languages;
-	        this.languagesCategories = languagesCategories;
-	    }*/
+        public void DisableIdElement(int idD)
+        {
+            foreach (IdElements ie in idElements)
+                if (ie.id == idD)
+                    ie.inUse = false;
+        }
 	}
 }

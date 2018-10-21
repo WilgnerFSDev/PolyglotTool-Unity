@@ -23,14 +23,7 @@ namespace Polyglot.Editor
 		private bool editCategories = false;
 		private string nameCategorie = "New Categorie";
 
-	    // list for languages working
-
 		private PolyglotSave polyglot;
-		/* Replaced for PolyglotSave ScriptableObject
-		private List<Translation> translations = new List<Translation>();
-		private List<string> languages = new List<string>();
-		private List<string> languagesCategories = new List<string>();
-		*/
 
 		private string menu = "List";
 
@@ -38,7 +31,6 @@ namespace Polyglot.Editor
 	    public static void ShowWindow()
 	    {
 	        GetWindow<PolyglotWindow>("Polyglot Tool");
-
 	    }
 
 		public string GetSaveLocalPath()
@@ -143,11 +135,11 @@ namespace Polyglot.Editor
 			polyglot.languagesCategories.Add("Game");
 			polyglot.languagesCategories.Add("Menu");
 
-	        Translation button0_En = new Translation(0, "Play Button", "Play", "Element0", c0);
-	        Translation button0_Pt = new Translation(1, "Play Button", "Jogar", "Element0", c0);
+	        Translation button0_En = new Translation(0, "Play Button", "Play", 0, c0);
+	        Translation button0_Pt = new Translation(1, "Play Button", "Jogar", 0, c0);
 
-	        Translation button1_En = new Translation(0, "Exit Button", "Exit", "Element1", c1);
-	        Translation button1_Pt = new Translation(1, "Exit Button", "Sair", "Element1", c1);
+	        Translation button1_En = new Translation(0, "Exit Button", "Exit", 1, c1);
+	        Translation button1_Pt = new Translation(1, "Exit Button", "Sair", 1, c1);
 
 			polyglot.translations.Add(button0_En);
 			polyglot.translations.Add(button0_Pt);
@@ -243,8 +235,9 @@ namespace Polyglot.Editor
 	                        if (EditorUtility.DisplayDialog("Delete Translation", "Are you sure you want to delete the " + t.nameID + " ?", "Yes", "No"))
 	                        {
 								polyglot.translations.RemoveAt(i);
-	                            if (brotherElement != null)
-									polyglot.translations.Remove(brotherElement);
+                                polyglot.DisableIdElement(t.idUniqueElements);
+                                if (brotherElement != null)
+                                    polyglot.translations.Remove(brotherElement);
 	                        }
 	                    }
 	                    GUILayout.EndHorizontal();
@@ -257,8 +250,14 @@ namespace Polyglot.Editor
 	        if (GUILayout.Button("Add New Translation"))
 	        {
 				Categories c = new Categories(selectedLanguageCategories, polyglot.languagesCategories[selectedLanguageCategories].ToString());
-				for (int i = 0; i < polyglot.languages.Count; i++) {
-					Translation element = new Translation(i, string.Format("Item Id {0}", i), "Translation here", string.Format("Element {0}", polyglot.translations.Count), c);
+                Vector2Int idE = GetIdElements();
+                if (idE.y == 0)
+                {
+                    IdElements idElement = new IdElements(true, polyglot.idElements.Count);
+                    polyglot.idElements.Add(idElement);
+                }
+                for (int i = 0; i < polyglot.languages.Count; i++) {
+                    Translation element = new Translation(i, "Item Id", "Translation here", idE.x, c);
 					polyglot.translations.Add(element);
 				}
 	        }
@@ -266,7 +265,7 @@ namespace Polyglot.Editor
 	        GUILayout.EndVertical();
 	    }
 
-	    Translation ChangeIdAnotherLanguage(string idUniqueElements, string nameIDBrotherLanguage)
+	    Translation ChangeIdAnotherLanguage(int idUniqueElements, string nameIDBrotherLanguage)
 	    {
 			foreach (Translation t in polyglot.translations)
 	        {
@@ -285,7 +284,19 @@ namespace Polyglot.Editor
 	        return null;
 	    }
 
-	    void ChangeLanguage()
+        Vector2Int GetIdElements(){
+            foreach(IdElements ie in polyglot.idElements)
+            {
+                if (ie.inUse == false)
+                {
+                    ie.inUse = true;
+                    return new Vector2Int(ie.id, 1);
+                }
+            }
+            return new Vector2Int(polyglot.idElements.Count, 0);
+        }
+
+        void ChangeLanguage()
 	    {
 			foreach (Translation t in polyglot.translations)
 	        {
