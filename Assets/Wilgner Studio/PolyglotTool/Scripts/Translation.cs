@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*
+* Author: Wilgner Fábio
+* Contributors: N0BODE
+*/
+using System;
 
 namespace Polyglot
 {

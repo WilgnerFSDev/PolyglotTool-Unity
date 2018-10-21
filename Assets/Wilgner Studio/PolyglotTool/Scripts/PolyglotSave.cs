@@ -1,4 +1,8 @@
-﻿using System.Collections;
+﻿/*
+* Author: Wilgner Fábio
+* Contributors: N0BODE
+*/
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 

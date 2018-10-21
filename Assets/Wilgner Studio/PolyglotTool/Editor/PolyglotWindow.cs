@@ -1,4 +1,9 @@
-﻿using System.Collections;
+﻿/*
+* Author: Wilgner Fábio
+* Contributors: N0BODE
+*/
+
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
@@ -10,49 +15,61 @@ namespace Polyglot.Editor
 {
 	public class PolyglotWindow : EditorWindow 
 	{
-	    private int selectedLanguage = 0;
+        // Which languages and categories are selected respectively
+        private int selectedLanguage = 0;
 		private int selectedLanguageCategories = 0;
 
-	    // New Language
-		private bool newLanguage = false;
-		private bool editLanguage = false;
-		private string nameLanguage = "New Language";
+        #region Languages Variables
+        private bool newLanguage = false; // Is New Languge
+		private bool editLanguage = false; // Edit mode
+		private string nameLanguage = "New Language"; // Name of new or edit language
+        #endregion
 
-	    // New Categories
-		private bool newCategories = false;
-		private bool editCategories = false;
-		private string nameCategorie = "New Categorie";
+        #region Categories Variables
+        private bool newCategories = false; // Is New Categories
+        private bool editCategories = false; // Edit mode
+        private string nameCategorie = "New Categorie"; // Name of new or edit categorie
+        #endregion
 
-		private PolyglotSave polyglot;
+        // Save/Load data in ScriptableObject (PolyglotSave)
+        private PolyglotSave polyglot;
 
+        // Name in inspector (List, New or Edit)
 		private string menu = "List";
 
-	    [MenuItem("Window/Polyglot Tool")]
+        #region Creates a window if it does not exist
+        [MenuItem("Window/Polyglot Tool")]
 	    public static void ShowWindow()
 	    {
 	        GetWindow<PolyglotWindow>("Polyglot Tool");
 	    }
+        #endregion
 
-		public string GetSaveLocalPath()
+        #region Path where data is saved
+        public string GetSaveLocalPath()
 		{
 			return "Assets/Resources/Polyglot.asset";
 		}
+        #endregion
 
-		private void OnEnable()
+
+        private void OnEnable()
 		{
-			//This is a singleton
-			this.polyglot = AssetDatabase.LoadAssetAtPath<PolyglotSave>(this.GetSaveLocalPath());
+            #region Attempts to load data from the ScriptableObject if it exists, if there is no create a new
+            this.polyglot = AssetDatabase.LoadAssetAtPath<PolyglotSave>(this.GetSaveLocalPath());
 			if (this.polyglot == null)
 			{
 				polyglot = CreateInstance<PolyglotSave> ();
 				this.SaveChanges ();
 			}
-		}
+            #endregion
+        }
 
-	    private void OnGUI()
+
+        private void OnGUI()
 	    {
-	        #region Languages List CRUD
-	        GUILayout.BeginVertical("Box");
+            #region Languages CRUD
+            GUILayout.BeginVertical("Box");
 			GUILayout.Label(string.Format("Supported Languages: {0}", menu), EditorStyles.boldLabel);
 	        GUILayout.BeginHorizontal();
 	        DrawLanguage();
@@ -77,13 +94,18 @@ namespace Polyglot.Editor
 	            nameLanguage = GUILayout.TextField(nameLanguage);
 				if (GUILayout.Button(buttonName, GUILayout.MaxWidth(150)))
 	            {
+                    bool exitsLanguage = false;
+
 	                if (editLanguage == false)
-	                    AddLanguage(nameLanguage);
+	                    exitsLanguage = AddLanguage(nameLanguage);
 	                else
 						this.polyglot.languages[selectedLanguage] = nameLanguage;
 
-	                ChangeNewLanguage();
-	                menu = "List";
+                    if (exitsLanguage == false)
+                    {
+                        ChangeNewLanguage();
+                        menu = "List";
+                    }
 	            }
 	            if (GUILayout.Button("Cancel", GUILayout.MaxWidth(150)))
 	            {
@@ -110,8 +132,6 @@ namespace Polyglot.Editor
 	                nameLanguage = polyglot.languages[selectedLanguage];
 	                editLanguage = true;
 	                menu = "Edit";
-
-	                AddElementsForTest();
 	            }
 	            if (GUILayout.Button("Delete", GUILayout.MaxWidth(150)))
 	            {
@@ -125,34 +145,11 @@ namespace Polyglot.Editor
 	        #endregion
 	    }
 
-	    void AddElementsForTest()
-	    {
-			polyglot.translations.Clear();
-			polyglot.languagesCategories.Clear();
-
-	        Categories c0 = new Categories(0, "Game");
-	        Categories c1 = new Categories(1, "Menu");
-			polyglot.languagesCategories.Add("Game");
-			polyglot.languagesCategories.Add("Menu");
-
-	        Translation button0_En = new Translation(0, "Play Button", "Play", 0, c0);
-	        Translation button0_Pt = new Translation(1, "Play Button", "Jogar", 0, c0);
-
-	        Translation button1_En = new Translation(0, "Exit Button", "Exit", 1, c1);
-	        Translation button1_Pt = new Translation(1, "Exit Button", "Sair", 1, c1);
-
-			polyglot.translations.Add(button0_En);
-			polyglot.translations.Add(button0_Pt);
-
-			polyglot.translations.Add(button1_En);
-			polyglot.translations.Add(button1_Pt);
-	    }
-
 	    void DrawCategoriesTranslations()
 	    {
-	        GUILayout.BeginHorizontal();
-	        #region Add/Edit Language
-	        if (newCategories == true)
+            #region Add/Edit Categories
+            GUILayout.BeginHorizontal();
+            if (newCategories == true)
 	        {
 				string buttonName = (editLanguage ? "Confirm" : "Add");
 	            nameCategorie = GUILayout.TextField(nameCategorie);
@@ -173,10 +170,10 @@ namespace Polyglot.Editor
 	            }
 	        }
 	        else
-	        #endregion
+            #endregion
 
-	        #region List Languages
-	        {
+            #region Categories CRUD
+            {
 				selectedLanguageCategories = EditorGUILayout.Popup(selectedLanguageCategories, polyglot.languagesCategories.ToArray());
 	            if (GUILayout.Button("New", GUILayout.MaxWidth(150)))
 	            {
@@ -192,8 +189,6 @@ namespace Polyglot.Editor
 					nameCategorie = polyglot.languagesCategories[selectedLanguageCategories];
 	                editCategories = true;
 	                menu = "Edit";
-
-	                AddElementsForTest();
 	            }
 	            if (GUILayout.Button("Delete", GUILayout.MaxWidth(150)))
 	            {
@@ -203,10 +198,11 @@ namespace Polyglot.Editor
 	                }
 	            }
 	        }
-	        #endregion
-	        GUILayout.EndHorizontal();
+            GUILayout.EndHorizontal();
+            #endregion
 
-	        GUILayout.BeginVertical("Box");
+            #region List Translations HEADER
+            GUILayout.BeginVertical("Box");
 	        GUILayout.Label("Translation", EditorStyles.boldLabel);
 	        GUILayout.BeginHorizontal("CN Box", GUILayout.MaxHeight(7));
 	        GUILayout.Label("Name ID", EditorStyles.boldLabel);
@@ -215,29 +211,37 @@ namespace Polyglot.Editor
 	        GUILayout.FlexibleSpace();
 	        GUILayout.Label("Settings", EditorStyles.boldLabel);
 	        GUILayout.EndHorizontal();
+            #endregion
 
-			for (int i = 0; i < polyglot.translations.Count; i++)
+            #region List Elements
+            // Browse a list of translations
+            for (int i = 0; i < polyglot.translations.Count; i++)
 	        {
 				Translation t = polyglot.translations [i];
-	            if (t.indexLanguage == selectedLanguage)
+                // Check if the translation is part of the selected language
+                if (t.indexLanguage == selectedLanguage)
 	            {
-	                if (selectedLanguageCategories == t.categories.index)
+                    // If part of the selected category
+                    if (selectedLanguageCategories == t.categories.index)
 	                {
 	                    float tam = position.width / 2;
 	                    GUILayout.BeginHorizontal("Box", GUILayout.MaxHeight(20));
 	                    t.nameID = GUILayout.TextField(t.nameID, GUILayout.MaxWidth(tam));
 	                    t.translation = GUILayout.TextField(t.translation, GUILayout.MaxWidth(tam));
 
-	                    Translation brotherElement = ChangeIdAnotherLanguage(t.idUniqueElements, t.nameID);
+                        // Changes the brother element in the other languages and get the brother
+                        Translation brotherElement = ChangeIdAnotherLanguage(t.idUniqueElements, t.nameID);
 
-	                    if (GUILayout.Button("\u00D7", GUILayout.MaxWidth(30)))
+                        // If you click the button to delete the translation
+                        if (GUILayout.Button("\u00D7", GUILayout.MaxWidth(30)))
 	                    {
-	                        if (EditorUtility.DisplayDialog("Delete Translation", "Are you sure you want to delete the " + t.nameID + " ?", "Yes", "No"))
+                            // Case YES
+                            if (EditorUtility.DisplayDialog("Delete Translation", "Are you sure you want to delete the " + t.nameID + " ?", "Yes", "No"))
 	                        {
-								polyglot.translations.RemoveAt(i);
-                                polyglot.DisableIdElement(t.idUniqueElements);
+								polyglot.translations.RemoveAt(i); // Remove translation
+                                polyglot.DisableIdElement(t.idUniqueElements); // Disable id brother
                                 if (brotherElement != null)
-                                    polyglot.translations.Remove(brotherElement);
+                                    polyglot.translations.Remove(brotherElement); // Delete brother element
 	                        }
 	                    }
 	                    GUILayout.EndHorizontal();
@@ -245,102 +249,161 @@ namespace Polyglot.Editor
 	                }
 	            }
 	        }
+            #endregion
 
-	        GUILayout.BeginVertical();
-	        if (GUILayout.Button("Add New Translation"))
+            #region Add New Translation
+            GUILayout.BeginVertical();
+            // If you click the button to add new translation
+            if (GUILayout.Button("Add New Translation"))
 	        {
+                // Create new categories (selected)
 				Categories c = new Categories(selectedLanguageCategories, polyglot.languagesCategories[selectedLanguageCategories].ToString());
+
+                // Try get a shared id between brothers translations
                 Vector2Int idE = GetIdElements();
+
+                // If there is no shared id available
                 if (idE.y == 0)
                 {
+                    // Create new shared id
                     IdElements idElement = new IdElements(true, polyglot.idElements.Count);
                     polyglot.idElements.Add(idElement);
                 }
+
+                // idE.x = id available (Line: 260)
+                // Creates the new translation in all available languages
                 for (int i = 0; i < polyglot.languages.Count; i++) {
                     Translation element = new Translation(i, "Item Id", "Translation here", idE.x, c);
 					polyglot.translations.Add(element);
 				}
 	        }
 	        GUILayout.EndVertical();
-	        GUILayout.EndVertical();
+            #endregion
+
+            GUILayout.EndVertical(); // End Begin Vertical in Categories HEADER (Line: 147)
 	    }
 
-	    Translation ChangeIdAnotherLanguage(int idUniqueElements, string nameIDBrotherLanguage)
+        // Changes the brother element in the other languages and get the brother
+        Translation ChangeIdAnotherLanguage(int idUniqueElements, string nameIDBrotherLanguage)
 	    {
-			foreach (Translation t in polyglot.translations)
+            // Scroll through the translations list
+            foreach (Translation t in polyglot.translations)
 	        {
-	            if (t.indexLanguage != selectedLanguage)
+                // Check if the translation is from the language selected
+                if (t.indexLanguage != selectedLanguage)
 	            {
-	                if (selectedLanguageCategories == t.categories.index)
+                    // Check if the translation is from the selected category
+                    if (selectedLanguageCategories == t.categories.index)
 	                {
-	                    if (t.idUniqueElements == idUniqueElements)
+                        // Check if id's are brothers
+                        if (t.idUniqueElements == idUniqueElements)
 	                    {
-	                        t.nameID = nameIDBrotherLanguage;
+                            // Change the name of the brother element
+                            t.nameID = nameIDBrotherLanguage;
+                            // Return brother element
 	                        return t;
 	                    }
 	                }
 	            }
 	        }
-	        return null;
+            // If it does not exist, return null
+            return null;
 	    }
 
+        // Check if a unique id(Compatibility) is free
         Vector2Int GetIdElements(){
-            foreach(IdElements ie in polyglot.idElements)
+            // Browse the list of shared ids
+            foreach (IdElements ie in polyglot.idElements)
             {
+                // If it is not in use (no translation is using it)
                 if (ie.inUse == false)
                 {
+                    // Set In Use true
                     ie.inUse = true;
+                    // Returns the id and id is available (no need to create a new one)
                     return new Vector2Int(ie.id, 1);
                 }
             }
+            // Returns an id that does not exist
             return new Vector2Int(polyglot.idElements.Count, 0);
         }
 
-        void ChangeLanguage()
+        // Add a language if it does not exist
+        bool AddLanguage(string name)
 	    {
-			foreach (Translation t in polyglot.translations)
-	        {
-	            if (t.indexLanguage == selectedLanguage)
-	            {
-	                if(t.nameID == "Play Novo")
-	                    GameObject.FindGameObjectWithTag("Respawn").GetComponent<Text>().text = t.translation;
-	            }
-	        }
+            bool exits = false;
+            // Browsing all the words in the languages list
+            foreach (string l in polyglot.languages)
+            {
+                // If the language exists
+                if (l == name)
+                    exits = true;
+            }
+
+            // If language does not exist
+            if (exits == false)
+                polyglot.languages.Add(name); // Add new language
+            else
+                Debug.Log(name + " language already exists");
+
+            return exits;
+        }
+
+        // Add a categories if it does not exist
+        void AddCategories(string name)
+	    {
+            bool exits = false;
+            // Browsing all the words in the categories list
+            foreach (string c in polyglot.languagesCategories)
+            {
+                // If the categories exists
+                if (c == name)
+                    exits = true;
+            }
+
+            // If categories does not exist
+            if (exits == false)
+            {
+                polyglot.languagesCategories.Add(name); // Add new categorie
+                selectedLanguageCategories = polyglot.languagesCategories.Count - 1; // Select the last categories
+            }
+            else
+            {
+                Debug.Log(name + " categories already exists");
+            }
 	    }
 
-	    void AddLanguage(string name)
-	    {
-			polyglot.languages.Add(name);
-	    }
-
-	    void AddCategories(string name)
-	    {
-			polyglot.languagesCategories.Add(name);
-			selectedLanguageCategories = polyglot.languagesCategories.Count - 1;
-	    }
-
+        // Remove categorie
 	    void RemoveCategorie()
 	    {
-			foreach(Translation t in polyglot.translations.ToArray())
+            // Browsing all the words in the languages list
+            foreach (Translation t in polyglot.translations.ToArray())
 	        {
+                // Get selected categorie
 				string c = polyglot.languagesCategories[selectedLanguageCategories];
-	            if (t.categories.name == c)
-					polyglot.translations.Remove(t);
-	        }
-			polyglot.languagesCategories.RemoveAt(selectedLanguageCategories);
-			selectedLanguageCategories = polyglot.languagesCategories.Count - 1;
-	    }
 
-	    void ChangeNewLanguage()
+                // If the translation of the category is equal to the selected category
+                if (t.categories.name == c)
+					polyglot.translations.Remove(t); // Removes all related translations
+            }
+            // Remove categories
+			polyglot.languagesCategories.RemoveAt(selectedLanguageCategories);
+			selectedLanguageCategories = polyglot.languagesCategories.Count - 1; // Select the last categories
+        }
+
+        // New, editing language or not
+        void ChangeNewLanguage()
 	    {
 	        newLanguage = !newLanguage;
 	    }
 
-	    void ChangeNewCategories()
+        // New, editing categorie or not
+        void ChangeNewCategories()
 	    {
 	        newCategories = !newCategories;
 	    }
 
+        // Save all data of Windows in ScriptableObject set in the Path
 	    void SaveChanges()
 		{
 			polyglot.selectedLanguage = this.selectedLanguage;
