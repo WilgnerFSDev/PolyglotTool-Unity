@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PolyglotTool", "Assembly-CSharp.csproj", "{841ECD71-B286-CC45-AF70-1498FE7C41C2}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PolyglotTool", "Assembly-CSharp-Editor.csproj", "{C634D8FD-7B2A-CF4B-60ED-71B7AE800A68}"
 EndProject
 Global
@@ -9,6 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{841ECD71-B286-CC45-AF70-1498FE7C41C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{841ECD71-B286-CC45-AF70-1498FE7C41C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{841ECD71-B286-CC45-AF70-1498FE7C41C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{841ECD71-B286-CC45-AF70-1498FE7C41C2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C634D8FD-7B2A-CF4B-60ED-71B7AE800A68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C634D8FD-7B2A-CF4B-60ED-71B7AE800A68}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C634D8FD-7B2A-CF4B-60ED-71B7AE800A68}.Release|Any CPU.ActiveCfg = Release|Any CPU

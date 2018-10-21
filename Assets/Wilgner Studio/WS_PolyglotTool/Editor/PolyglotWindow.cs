@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
-
+/*
 [System.Serializable]
 public class Categories
 {
@@ -14,6 +14,11 @@ public class Categories
     {
         this.index = index;
         this.name = name;
+    }
+
+    public string List()
+    {
+        return "index: " + index + " | name: " + name;
     }
 }
 
@@ -35,30 +40,33 @@ public class Translation
         this.idUniqueElements = idUniqueElements;
     }
 }
-
+*/
 public class PolyglotWindow : EditorWindow {
 
-    // mostra(0) > mostraCategoria(0) 
+    /*
+     * Se me chamar de javista ta morto
+     * <3
+     * */
+    public PolyglotSave polyglotSave;
 
     int selectedLanguage = 0;
     int selectedLanguageCategories = 0;
 
+    // New Language
     bool newLanguage = false;
     bool editLanguage = false;
     string nameLanguage = "New Language";
 
-    // list for languages working
-    //Dictionary<string, string> languagesSC = new Dictionary<string, string>();
-    List<Translation> lista = new List<Translation>();
-    
+    // New Categories
+    bool newCategories = false;
+    bool editCategories = false;
+    string nameCategorie = "New Categorie";
 
+    // list for languages working
+    List<polyglotSave.> translations = new List<Translation>();
+    
     List<string> languages = new List<string>();
     List<string> languagesCategories = new List<string>();
-    List<string> languagesSubCategories = new List<string>();
-
-    List<List<string>> languagesTranslation = new List<List<string>>();
-
-    List<List<List<string>>> languages2 = new List<List<List<string>>>();
 
     string menu = "List";
 
@@ -79,45 +87,12 @@ public class PolyglotWindow : EditorWindow {
         GUILayout.EndVertical();
         #endregion
 
-        #region Language Categories
-        /*
-        GUILayout.BeginVertical("Box");
-        GUILayout.Label("Categories", EditorStyles.boldLabel);
-        GUILayout.BeginHorizontal();
-        DrawCategories();
-        GUILayout.EndHorizontal();
-        GUILayout.EndVertical();
-        */
-        #endregion
-
-        #region Language Element
+        #region Language Categories/Translations
         GUILayout.BeginVertical("Box");
         GUILayout.Label("Categorioes", EditorStyles.boldLabel);
-        DrawCategories();
+        DrawCategoriesTranslations();
         GUILayout.EndVertical();
         #endregion
-    }
-
-    void ListLanguages()
-    {
-        int i = 0;
-        foreach(string l in languages)
-        {
-            Debug.Log(l);
-            int j = 0;
-            foreach (string lc in languagesCategories)
-            {
-                Debug.Log(lc);
-                int k = 0;
-                foreach (string lsc in languagesSubCategories)
-                {
-                    Debug.Log(lsc);
-                    k++;
-                }
-                j++;
-            }
-            i++;
-        }
     }
 
     void DrawLanguage()
@@ -150,7 +125,7 @@ public class PolyglotWindow : EditorWindow {
         #region List Languages
         {
             selectedLanguage = EditorGUILayout.Popup(selectedLanguage, languages.ToArray());
-            if (GUILayout.Button("Add New Language", GUILayout.MaxWidth(150)))
+            if (GUILayout.Button("New", GUILayout.MaxWidth(150)))
             {
                 ChangeNewLanguage();
                 int count = languages.Count + 1;
@@ -158,7 +133,7 @@ public class PolyglotWindow : EditorWindow {
                 editLanguage = false;
                 menu = "New";
             }
-            if (GUILayout.Button("Edit Name", GUILayout.MaxWidth(150)))
+            if (GUILayout.Button("Edit", GUILayout.MaxWidth(150)))
             {
                 ChangeNewLanguage();
                 nameLanguage = languages[selectedLanguage];
@@ -167,16 +142,12 @@ public class PolyglotWindow : EditorWindow {
 
                 AddElementsForTest();
             }
-            if (GUILayout.Button("Delete Language", GUILayout.MaxWidth(150)))
+            if (GUILayout.Button("Delete", GUILayout.MaxWidth(150)))
             {
                 if(EditorUtility.DisplayDialog("Delete Language", "Are you sure you want to delete the " + languages[selectedLanguage] + " language and all data together?", "Yes", "No")){
                     languages.RemoveAt(selectedLanguage);
                     selectedLanguage = languages.Count-1;
                 }
-            }
-            if(GUILayout.Button("Test Language", GUILayout.MaxWidth(150)))
-            {
-                ChangeLanguage();
             }
         }
         #endregion
@@ -184,7 +155,7 @@ public class PolyglotWindow : EditorWindow {
 
     void AddElementsForTest()
     {
-        lista.Clear();
+        translations.Clear();
         languagesCategories.Clear();
 
         Categories c0 = new Categories(0, "Game");
@@ -198,37 +169,112 @@ public class PolyglotWindow : EditorWindow {
         Translation button1_En = new Translation(0, "Exit Button", "Exit", "Element1", c1);
         Translation button1_Pt = new Translation(1, "Exit Button", "Sair", "Element1", c1);
 
-        lista.Add(button0_En);
-        lista.Add(button0_Pt);
+        translations.Add(button0_En);
+        translations.Add(button0_Pt);
 
-        lista.Add(button1_En);
-        lista.Add(button1_Pt);
+        translations.Add(button1_En);
+        translations.Add(button1_Pt);
     }
 
-    void DrawCategories()
+    void DrawCategoriesTranslations()
     {
-        selectedLanguageCategories = EditorGUILayout.Popup(selectedLanguageCategories, languagesCategories.ToArray());
-        GUILayout.BeginVertical("Box");
-        GUILayout.Label("Translation", EditorStyles.boldLabel);
         GUILayout.BeginHorizontal();
-        GUILayout.Label("Name ID");
-        GUILayout.Label("Translation");
+        #region Add/Edit Language
+        if (newCategories == true)
+        {
+            string buttonName = "Add";
+            nameCategorie = GUILayout.TextField(nameCategorie);
+            if (editCategories == true)
+                buttonName = "Confirm";
+            if (GUILayout.Button(buttonName, GUILayout.MaxWidth(150)))
+            {
+                if (editCategories == false)
+                    AddCategories(nameCategorie);
+                else
+                    languagesCategories[selectedLanguageCategories] = nameCategorie;
+
+                ChangeNewCategories();
+                menu = "List";
+            }
+            if (GUILayout.Button("Cancel", GUILayout.MaxWidth(150)))
+            {
+                ChangeNewCategories();
+                menu = "List";
+            }
+        }
+        else
+        #endregion
+
+        #region List Languages
+        {
+            selectedLanguageCategories = EditorGUILayout.Popup(selectedLanguageCategories, languagesCategories.ToArray());
+            if (GUILayout.Button("New", GUILayout.MaxWidth(150)))
+            {
+                ChangeNewCategories();
+                int count = languagesCategories.Count + 1;
+                nameCategorie = "New Categorie " + count;
+                editCategories = false;
+                menu = "New";
+            }
+            if (GUILayout.Button("Edit", GUILayout.MaxWidth(150)))
+            {
+                ChangeNewCategories();
+                nameCategorie = languagesCategories[selectedLanguageCategories];
+                editCategories = true;
+                menu = "Edit";
+
+                AddElementsForTest();
+            }
+            if (GUILayout.Button("Delete", GUILayout.MaxWidth(150)))
+            {
+                if (EditorUtility.DisplayDialog("Delete Categories", "Are you sure you want to delete the " + languagesCategories[selectedLanguageCategories] + " categories ?", "Yes", "No"))
+                {
+                    RemoveCategorie();
+                }
+            }
+        }
+        #endregion
         GUILayout.EndHorizontal();
 
-        foreach (Translation t in lista)
+        GUILayout.BeginVertical("Box");
+        GUILayout.Label("Translation", EditorStyles.boldLabel);
+        GUILayout.BeginHorizontal("CN Box", GUILayout.MaxHeight(7));
+        GUILayout.Label("Name ID", EditorStyles.boldLabel);
+        GUILayout.FlexibleSpace();
+        GUILayout.Label("Translation", EditorStyles.boldLabel);
+        GUILayout.FlexibleSpace();
+        GUILayout.Label("Settings", EditorStyles.boldLabel);
+        GUILayout.EndHorizontal();
+
+        int j = 0;
+        foreach (Translation t in translations.ToArray())
         {
             if (t.indexLanguage == selectedLanguage)
             {
                 if (selectedLanguageCategories == t.categories.index)
                 {
-                    GUILayout.BeginHorizontal();
-                    t.nameID = GUILayout.TextField(t.nameID);
-                    t.translation = GUILayout.TextField(t.translation);
-                    GUILayout.EndHorizontal();
+                    float tam = position.width / 2;
+                    GUILayout.BeginHorizontal("Box", GUILayout.MaxHeight(20));
+                    t.nameID = GUILayout.TextField(t.nameID, GUILayout.MaxWidth(tam));
+                    t.translation = GUILayout.TextField(t.translation, GUILayout.MaxWidth(tam));
 
-                    ChangeIdAnotherLanguage(t.idUniqueElements, t.nameID);
+                    Translation brotherElement = ChangeIdAnotherLanguage(t.idUniqueElements, t.nameID);
+
+                    if (GUILayout.Button("X", GUILayout.MaxWidth(30)))
+                    {
+                        if (EditorUtility.DisplayDialog("Delete Translation", "Are you sure you want to delete the " + t.nameID + " ?", "Yes", "No"))
+                        {
+                            translations.Remove(t);
+
+                            if (brotherElement != null)
+                                translations.Remove(brotherElement);
+                        }
+                    }
+                    GUILayout.EndHorizontal();
+                    GUILayout.Space(2);
                 }
             }
+            j++;
         }
 
         GUILayout.BeginVertical();
@@ -237,11 +283,11 @@ public class PolyglotWindow : EditorWindow {
             Categories c = new Categories(selectedLanguageCategories, languagesCategories[selectedLanguageCategories].ToString());
             int i = 0;
             int e = 0;
-            foreach (Translation t in lista) { e++; }
+            foreach (Translation t in translations) { e++; }
             foreach (string l in languages)
             {
                 Translation element = new Translation(i, "Item Id "+i, "Translation here", "Element"+e, c);
-                lista.Add(element);
+                translations.Add(element);
                 i++;
             }  
         }
@@ -249,18 +295,28 @@ public class PolyglotWindow : EditorWindow {
         GUILayout.EndVertical();
     }
 
-    void ChangeIdAnotherLanguage(string idUniqueElements, string nameIDBrotherLanguage)
+    Translation ChangeIdAnotherLanguage(string idUniqueElements, string nameIDBrotherLanguage)
     {
-        foreach (Translation t in lista)
+        foreach (Translation t in translations)
+        {
             if (t.indexLanguage != selectedLanguage)
+            {
                 if (selectedLanguageCategories == t.categories.index)
+                {
                     if (t.idUniqueElements == idUniqueElements)
+                    {
                         t.nameID = nameIDBrotherLanguage;
+                        return t;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     void ChangeLanguage()
     {
-        foreach (Translation t in lista)
+        foreach (Translation t in translations)
         {
             if (t.indexLanguage == selectedLanguage)
             {
@@ -275,8 +331,41 @@ public class PolyglotWindow : EditorWindow {
         languages.Add(name);
     }
 
+    void AddCategories(string name)
+    {
+        languagesCategories.Add(name);
+        selectedLanguageCategories = languagesCategories.Count - 1;
+    }
+
+    void RemoveCategorie()
+    {
+        foreach(Translation t in translations.ToArray())
+        {
+            string c = languagesCategories[selectedLanguageCategories];
+            if (t.categories.name == c)
+            {
+                translations.Remove(t);
+            }
+        }
+        languagesCategories.RemoveAt(selectedLanguageCategories);
+        selectedLanguageCategories = languagesCategories.Count - 1;
+    }
+
     void ChangeNewLanguage()
     {
         newLanguage = !newLanguage;
+    }
+
+    void ChangeNewCategories()
+    {
+        newCategories = !newCategories;
+    }
+
+    void SaveChanges()
+    {
+        string nameFile ="myfile.asset";
+        PolyglotSave polyglotSave = new PolyglotSave(selectedLanguage, selectedLanguageCategories, translations, languages, languagesCategories);
+        AssetDatabase.CreateAsset(polyglotSave, "Assets/WS_USQLFramework/Resources/DataBase/"+nameFile);
+        AssetDatabase.SaveAssets();
     }
 }
