@@ -50,9 +50,13 @@ Add the FindTranslation component and set the translation ID (Name ID)
 ![](http://142.93.126.85/findtranslation_plt.gif)
 
 Create an empty object with the Language Control component or add the prefab.
-Select the initial language and you're done =)
+Select the initial language and you're done =)<br/>
 ![](http://142.93.126.85/pgt6.png)
 ![](http://142.93.126.85/pgt_done.gif)
+
+## Integration with TextMesh Pro
+![](http://142.93.126.85/pgt8.png)
+![](http://142.93.126.85/pgt9.png)
 
 Thanks =)
 

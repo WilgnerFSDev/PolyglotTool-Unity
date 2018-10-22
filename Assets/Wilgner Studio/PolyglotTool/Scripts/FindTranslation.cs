@@ -3,11 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Polyglot;
+#if TMP
+using TMPro;
+#endif
 
 public class FindTranslation : MonoBehaviour {
 
     public string nameId;
     public Text text;
+#if TMP
+    public TMP_Text textP;
+#endif
     public PolyglotSave polyglot;
     public List<Translation> searchTranslations;
 
@@ -16,6 +22,11 @@ public class FindTranslation : MonoBehaviour {
     // Use this for initialization
     void Start () {
         this.text = this.GetComponent<Text>();
+
+#if TMP
+        this.textP = this.GetComponent<TMP_Text>();
+#endif
+
         this.lc = GameObject.FindObjectOfType<LanguageControl>();
         if (polyglot == null)
             Debug.Log("Polyglot is null!");
@@ -35,6 +46,14 @@ public class FindTranslation : MonoBehaviour {
     {
         Translation t = polyglot.GetTranslationByName(nameId, lc.selectedLanguage);
         if (t != null)
-            this.text.text = t.translation;
+        {
+#if TMP
+            if(textP != null)
+                this.textP.text = t.translation;
+#endif
+
+            if (text != null)
+                this.text.text = t.translation;
+        }
     }
 }

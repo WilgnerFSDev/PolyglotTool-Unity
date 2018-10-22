@@ -558,7 +558,7 @@ PlayerSettings:
   webGLCompressionFormat: 1
   webGLLinkerTarget: 0
   scriptingDefineSymbols:
-    1: WS_PGT
+    1: WS_PGT;TMP
   platformArchitecture: {}
   scriptingBackend: {}
   il2cppCompilerConfiguration: {}
