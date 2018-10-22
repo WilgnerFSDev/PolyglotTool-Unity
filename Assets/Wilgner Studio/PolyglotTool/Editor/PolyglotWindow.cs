@@ -19,6 +19,8 @@ namespace Polyglot.Editor
         private int selectedLanguage = 0;
 		private int selectedLanguageCategories = 0;
 
+        private Vector2 scrollTranslations;
+
         #region Languages Variables
         private bool newLanguage = false; // Is New Languge
 		private bool editLanguage = false; // Edit mode
@@ -68,6 +70,44 @@ namespace Polyglot.Editor
 
         private void OnGUI()
 	    {
+            #region Icon and Social Links
+            GUILayout.Space(10);
+            Texture2D logo = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Wilgner Studio/PolyglotTool/Images/Editor/pgt-logo.png", typeof(Texture2D));
+            var style = new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter };
+            GUILayout.Label(logo, style, GUILayout.ExpandWidth(true), GUILayout.Height(70));
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+
+            int buttonSize = 40;
+
+            Texture2D githubicon = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Wilgner Studio/PolyglotTool/Images/Editor/github-icon.png", typeof(Texture2D));
+            if (GUILayout.Button(githubicon, GUILayout.MaxWidth(buttonSize), GUILayout.MaxHeight(buttonSize)))
+            {
+                Application.OpenURL("https://github.com/WilgnerFSDev/PolyglotTool-Unity");
+            }
+
+            Texture2D wsicon = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Wilgner Studio/PolyglotTool/Images/Editor/ws-icon.png", typeof(Texture2D));
+            if (GUILayout.Button(wsicon, GUILayout.MaxWidth(buttonSize), GUILayout.MaxHeight(buttonSize)))
+            {
+                Application.OpenURL("http://wilgnerstudio.com");
+            }
+            /*
+            if (GUILayout.Button("A", GUILayout.MaxWidth(buttonSize), GUILayout.MaxHeight(buttonSize)))
+            {
+                // Asset Store
+                //Application.OpenURL("http://unity3d.com/");
+            }
+            */
+
+            Texture2D ppicon = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Wilgner Studio/PolyglotTool/Images/Editor/pp-icon.png", typeof(Texture2D));
+            if (GUILayout.Button(ppicon, GUILayout.MaxWidth(buttonSize), GUILayout.MaxHeight(buttonSize)))
+            {
+                // Donate - Buy me a coffee?
+                Application.OpenURL("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NVH5N8ALD8R7C");
+            }
+            GUILayout.EndHorizontal();
+            #endregion
+
             #region Languages CRUD
             GUILayout.BeginVertical("Box");
 			GUILayout.Label(string.Format("Supported Languages: {0}", menu), EditorStyles.boldLabel);
@@ -82,8 +122,9 @@ namespace Polyglot.Editor
 	        GUILayout.Label("Categorioes", EditorStyles.boldLabel);
 	        DrawCategoriesTranslations();
 	        GUILayout.EndVertical();
-	        #endregion
-	    }
+            #endregion
+
+        }
 
 	    void DrawLanguage()
 	    {
@@ -214,6 +255,7 @@ namespace Polyglot.Editor
             #endregion
 
             #region List Elements
+            scrollTranslations = EditorGUILayout.BeginScrollView(scrollTranslations, GUILayout.Width(position.width*0.977f), GUILayout.Height(140));
             // Browse a list of translations
             for (int i = 0; i < polyglot.translations.Count; i++)
 	        {
@@ -249,6 +291,7 @@ namespace Polyglot.Editor
 	                }
 	            }
 	        }
+            EditorGUILayout.EndScrollView();
             #endregion
 
             #region Add New Translation
@@ -301,7 +344,7 @@ namespace Polyglot.Editor
                             // Change the name of the brother element
                             t.nameID = nameIDBrotherLanguage;
                             // Return brother element
-	                        return t;
+                            return t;
 	                    }
 	                }
 	            }
@@ -411,5 +454,6 @@ namespace Polyglot.Editor
 			AssetDatabase.CreateAsset(polyglot, this.GetSaveLocalPath());
 	        AssetDatabase.SaveAssets();
 	    }
-	}
+
+    }
 }

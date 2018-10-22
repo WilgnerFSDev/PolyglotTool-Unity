@@ -23,5 +23,27 @@ namespace Polyglot{
                 if (ie.id == idD)
                     ie.inUse = false;
         }
-	}
+
+        public List<Translation> AutoComplete(string name)
+        {
+            List<Translation> elementsFind = new List<Translation> ();
+            foreach(Translation t in translations)
+            {
+                if (t.nameID.Contains(name) && t.indexLanguage == 0 && t.nameID != name)
+                    elementsFind.Add(t);
+            }
+            return elementsFind;
+        }
+
+        public Translation GetTranslationByName(string name, int currentLang)
+        {
+            foreach (Translation t in translations)
+            {
+                if (t.nameID == name && t.indexLanguage == currentLang)
+                    return t;
+            }
+
+            return null;
+        }
+    }
 }

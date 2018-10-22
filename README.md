@@ -1,6 +1,11 @@
-# Project Title
+![](http://142.93.126.85/pgl-tool.png)
 
-One Paragraph of project description goes here
+The Polyglot Tool was created to help you translate your game simply and quickly from a custom WindowEditor with the data saved in a json file. You can add the languages you want as well as the categories and relate to the translations.
+
+## Features
+- Unlimited Languages
+- Possibility of creating categories (facilitate organization)
+- Add translations
 
 ## Getting Started
 
@@ -11,78 +16,58 @@ These instructions will get you a copy of the project up and running on your loc
 What things you need to install the software and how to install them
 
 ```
-Give examples
+git clone https://github.com/WilgnerFSDev/PolyglotTool-Unity.git
 ```
-
-### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [Unity](https://unity3d.com/) - Unity
 
-## Contributing
+## Ways to support the project
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+1 - Make pull requests<br/>
+2 - See my other projects [here](https://www.wilgnerstudio.com/assets/)<br/>
+3 - Consider buying me a coffee
 
-## Versioning
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NVH5N8ALD8R7C)
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+## Installing and Using
+
+Before starting I always recommend doing a backup.
+After that, simply add to an existing project or open a new project.
+
+![](http://142.93.126.85/pgt1.png)
+
+![](http://142.93.126.85/pgt2.png)
+
+![](http://142.93.126.85/pgt3.png)
+
+Create the translations you need
+![](http://142.93.126.85/pgt4.png)
+![](http://142.93.126.85/pgt5.png)
+
+Add the FindTranslation component and set the translation ID (Name ID)
+![](http://142.93.126.85/findtranslation_plt.gif)
+
+Create an empty object with the Language Control component or add the prefab.
+Select the initial language and you're done =)
+![](http://142.93.126.85/pgt6.png)
+![](http://142.93.126.85/pgt_done.gif)
+
+Thanks =)
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Wilgner Fábio** - *Initial work* - [Wilgner's Studio](https://assetstore.unity.com/publishers/34772)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/WilgnerFSDev/PolyglotTool-Unity/graphs/contributors) who participated in this project.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+Copyright 2018 Wilgner's Studio, Inc.
 
-## Acknowledgments
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
