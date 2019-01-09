@@ -67,6 +67,11 @@ namespace Polyglot.Editor
             #endregion
         }
 
+        private void OnDisable() {
+            EditorUtility.SetDirty(polyglot);
+            AssetDatabase.SaveAssets();
+        }
+
 
         private void OnGUI()
 	    {

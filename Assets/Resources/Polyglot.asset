@@ -14,10 +14,10 @@ MonoBehaviour:
   selectedLanguage: 0
   selectedLanguageCategories: 0
   translations: []
-  languages:
-  - English
-  - Portuguese
-  languagesCategories:
-  - Menu
-  - Game
-  idElements: []
+  languages: []
+  languagesCategories: []
+  idElements:
+  - inUse: 0
+    id: 0
+  - inUse: 0
+    id: 1
