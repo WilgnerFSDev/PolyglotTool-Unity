@@ -50,7 +50,7 @@ namespace Polyglot.Editor
         #region Path where data is saved
         public string GetSaveLocalPath()
 		{
-			return "Assets/Resources/Polyglot.asset";
+			return "Assets/Wilgner Studio/PolyglotTool/DataBase/Polyglot.asset";
 		}
         #endregion
 
@@ -61,8 +61,13 @@ namespace Polyglot.Editor
             this.polyglot = AssetDatabase.LoadAssetAtPath<PolyglotSave>(this.GetSaveLocalPath());
 			if (this.polyglot == null)
 			{
-				polyglot = CreateInstance<PolyglotSave> ();
-				this.SaveChanges ();
+                PolyglotSave asset = ScriptableObject.CreateInstance<PolyglotSave>();
+
+                AssetDatabase.CreateAsset(asset, this.GetSaveLocalPath());
+                AssetDatabase.SaveAssets();
+
+                this.polyglot = AssetDatabase.LoadAssetAtPath<PolyglotSave>(this.GetSaveLocalPath());
+                this.SaveChanges ();
 			}
             #endregion
         }
@@ -271,7 +276,7 @@ namespace Polyglot.Editor
                     // If part of the selected category
                     if (selectedLanguageCategories == t.categories.index)
 	                {
-	                    float tam = position.width / 2;
+	                    float tam = position.width / 2 - 30;
 	                    GUILayout.BeginHorizontal("Box", GUILayout.MaxHeight(20));
 	                    t.nameID = GUILayout.TextField(t.nameID, GUILayout.MaxWidth(tam));
 	                    t.translation = GUILayout.TextField(t.translation, GUILayout.MaxWidth(tam));
@@ -466,8 +471,6 @@ namespace Polyglot.Editor
 		{
 			polyglot.selectedLanguage = this.selectedLanguage;
 			polyglot.selectedLanguageCategories = this.selectedLanguageCategories;
-			AssetDatabase.CreateAsset(polyglot, this.GetSaveLocalPath());
-	        AssetDatabase.SaveAssets();
 	    }
 
     }

@@ -16,8 +16,4 @@ MonoBehaviour:
   translations: []
   languages: []
   languagesCategories: []
-  idElements:
-  - inUse: 0
-    id: 0
-  - inUse: 0
-    id: 1
+  idElements: []

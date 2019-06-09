@@ -201,7 +201,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameId: 
   text: {fileID: 0}
-  textP: {fileID: 0}
   polyglot: {fileID: 11400000, guid: f6300d6b08f879f4ea6c93262a9ac644, type: 2}
   searchTranslations: []
 --- !u!1 &519420028
@@ -410,7 +409,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 25
+  m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
