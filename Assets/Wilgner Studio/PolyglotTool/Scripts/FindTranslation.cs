@@ -39,12 +39,12 @@ public class FindTranslation : MonoBehaviour {
 
     public string GetSaveLocalPath()
     {
-        return "Assets/Resources/Polyglot.asset";
+        return "Assets/Wilgner Studio/PolyglotTool/DataBase/Polyglot.asset";
     }
 
     public void SetText()
     {
-        Translation t = polyglot.GetTranslationByName(nameId, lc.selectedLanguage);
+        Translation t = polyglot.GetTranslationByName(nameId, lc.GetSelectedLanguage());
         if (t != null)
         {
 #if TMP

@@ -8,14 +8,12 @@ public class LanguageControl : MonoBehaviour {
 
     public PolyglotSave polyglot;
     public UnityEvent LanguageChanged = new UnityEvent();
-    public int selectedLanguage;
+    [SerializeField]
+    private int selectedLanguage;
     public int previousSelectedLanguage = -1;
 
     // Use this for initialization
     void Start () {
-        if (polyglot == null)
-            Debug.Log("Polyglot is null!");
-
         LanguageChanged.AddListener(UpdateTextTranslation);
     }
 	
@@ -37,6 +35,14 @@ public class LanguageControl : MonoBehaviour {
 
     public string GetSaveLocalPath()
     {
-        return "Assets/Resources/Polyglot.asset";
+        return "Assets/Wilgner Studio/PolyglotTool/DataBase/Polyglot.asset";
+    }
+
+    public int GetSelectedLanguage() {
+        return this.selectedLanguage;
+    }
+
+    public void SetSelectedLanguage(int value) {
+        this.selectedLanguage = value;
     }
 }

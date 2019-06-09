@@ -18,6 +18,9 @@ public class LanguageControlEditor : Editor
         languageControl = (LanguageControl)target;
         script = new SerializedObject(target);
 
+        if (languageControl.polyglot == null)
+            this.languageControl.polyglot = AssetDatabase.LoadAssetAtPath<PolyglotSave>(languageControl.GetSaveLocalPath());
+
         LanguageChanged = script.FindProperty("LanguageChanged");
     }
 
@@ -26,9 +29,8 @@ public class LanguageControlEditor : Editor
         //DrawDefaultInspector ();
         script.Update();
         EditorGUI.BeginChangeCheck();
-        this.languageControl.polyglot = AssetDatabase.LoadAssetAtPath<PolyglotSave>(languageControl.GetSaveLocalPath());
 
-        languageControl.selectedLanguage = EditorGUILayout.Popup("Selected Languages: ", languageControl.selectedLanguage, languageControl.polyglot.languages.ToArray());
+        languageControl.SetSelectedLanguage(EditorGUILayout.Popup("Selected Languages: ", languageControl.GetSelectedLanguage(), languageControl.polyglot.languages.ToArray()));
         EditorGUILayout.PropertyField(LanguageChanged);
 
         if (EditorGUI.EndChangeCheck())

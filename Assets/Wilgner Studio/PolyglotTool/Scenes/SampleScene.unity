@@ -199,9 +199,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f16b0ef7e682fb4a83f8f9e41fbe01b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nameId: 
+  nameId: asd
   text: {fileID: 0}
-  polyglot: {fileID: 11400000, guid: f6300d6b08f879f4ea6c93262a9ac644, type: 2}
+  polyglot: {fileID: 11400000, guid: 7173caba72f06b040b1e7157d28082a0, type: 2}
   searchTranslations: []
 --- !u!1 &519420028
 GameObject:
@@ -469,6 +469,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4297948225342004, guid: 9423cfed3846fb9479a20aee58b826e3, type: 2}
       propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114472444278542456, guid: 9423cfed3846fb9479a20aee58b826e3,
+        type: 2}
+      propertyPath: selectedLanguage
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

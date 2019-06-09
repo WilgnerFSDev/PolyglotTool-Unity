@@ -13,7 +13,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectedLanguage: 0
   selectedLanguageCategories: 0
-  translations: []
-  languages: []
-  languagesCategories: []
-  idElements: []
+  translations:
+  - indexLanguage: 0
+    nameID: asd
+    translation: ASD
+    idUniqueElements: 0
+    categories:
+      index: 0
+      name: New Categorie 1
+  - indexLanguage: 1
+    nameID: asd
+    translation: dsa
+    idUniqueElements: 0
+    categories:
+      index: 0
+      name: New Categorie 1
+  languages:
+  - New Language 1
+  - New Language 2
+  languagesCategories:
+  - New Categorie 1
+  idElements:
+  - inUse: 1
+    id: 0
