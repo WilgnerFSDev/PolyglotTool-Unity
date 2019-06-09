@@ -304,8 +304,18 @@ namespace Polyglot.Editor
             // If you click the button to add new translation
             if (GUILayout.Button("Add New Translation"))
 	        {
+                // A language and category is required to create a translation
+                string error = "";
+                if (polyglot.languages.Count == 0) error += "Language is required\n";
+                if (polyglot.languagesCategories.Count == 0) error += "Category is required";
+
+                if (error != "") {
+                    Debug.Log(error);
+                    return;
+                }
+
                 // Create new categories (selected)
-				Categories c = new Categories(selectedLanguageCategories, polyglot.languagesCategories[selectedLanguageCategories].ToString());
+                Categories c = new Categories(selectedLanguageCategories, polyglot.languagesCategories[selectedLanguageCategories].ToString());
 
                 // Try get a shared id between brothers translations
                 Vector2Int idE = GetIdElements();
