@@ -147,10 +147,25 @@ namespace Polyglot.Editor
 	            {
                     bool exitsLanguage = false;
 
-	                if (editLanguage == false)
+	                if (editLanguage == false) {
 	                    exitsLanguage = AddLanguage(nameLanguage);
-	                else
-						this.polyglot.languages[selectedLanguage] = nameLanguage;
+                        int indexLanguage = FindIndexLanguageByName(nameLanguage);
+                        if(indexLanguage != -1) {
+                            // 
+                            foreach (Translation t in polyglot.translations.ToArray()) {
+                                if (t.indexLanguage == 0) {
+                                    Translation newTranslation = new Translation(indexLanguage, t.nameID, "Translation here", t.idUniqueElements, t.categories);
+                                    polyglot.translations.Add(newTranslation);
+                                }
+                            }
+                        }
+                        else {
+                            Debug.LogError("Unable to add existing translations for new language!");
+                        }            
+                    }
+                    else {
+                        this.polyglot.languages[selectedLanguage] = nameLanguage;
+                    }
 
                     if (exitsLanguage == false)
                     {
@@ -171,7 +186,7 @@ namespace Polyglot.Editor
 				selectedLanguage = EditorGUILayout.Popup(selectedLanguage, polyglot.languages.ToArray());
 	            if (GUILayout.Button("New", GUILayout.MaxWidth(150)))
 	            {
-	                ChangeNewLanguage();
+                    ChangeNewLanguage();
 					int count = polyglot.languages.Count + 1;
 	                nameLanguage = "New Language "+count;
 	                editLanguage = false;
@@ -179,18 +194,20 @@ namespace Polyglot.Editor
 	            }
 	            if (GUILayout.Button("Edit", GUILayout.MaxWidth(150)))
 	            {
-	                ChangeNewLanguage();
+                    if (polyglot.languages.Count == 0) return;
+                    ChangeNewLanguage();
 	                nameLanguage = polyglot.languages[selectedLanguage];
 	                editLanguage = true;
 	                menu = "Edit";
 	            }
 	            if (GUILayout.Button("Delete", GUILayout.MaxWidth(150)))
 	            {
-					if(EditorUtility.DisplayDialog("Delete Language", string.Format(@"Are you sure you want to delete the {0} language and all data together?", polyglot.languages[selectedLanguage]), "Yes", "No"))
-					{
-						polyglot.languages.RemoveAt(selectedLanguage);
-						selectedLanguage = polyglot.languages.Count - 1;
-	                }
+                    if (polyglot.languages.Count == 0) return;
+                    if (EditorUtility.DisplayDialog("Delete Language", string.Format(@"Are you sure you want to delete the {0} language and all data together?", polyglot.languages[selectedLanguage]), "Yes", "No")) {
+                        polyglot.languages.RemoveAt(selectedLanguage);
+                        selectedLanguage = polyglot.languages.Count - 1;
+                    }
+                    
 	            }
 	        }
 	        #endregion
@@ -228,7 +245,8 @@ namespace Polyglot.Editor
 				selectedLanguageCategories = EditorGUILayout.Popup(selectedLanguageCategories, polyglot.languagesCategories.ToArray());
 	            if (GUILayout.Button("New", GUILayout.MaxWidth(150)))
 	            {
-	                ChangeNewCategories();
+                    if (polyglot.languages.Count == 0) return;
+                    ChangeNewCategories();
 					int count = polyglot.languagesCategories.Count + 1;
 	                nameCategorie = "New Categorie " + count;
 	                editCategories = false;
@@ -236,14 +254,16 @@ namespace Polyglot.Editor
 	            }
 	            if (GUILayout.Button("Edit", GUILayout.MaxWidth(150)))
 	            {
-	                ChangeNewCategories();
+                    if (polyglot.languagesCategories.Count == 0) return;
+                    ChangeNewCategories();
 					nameCategorie = polyglot.languagesCategories[selectedLanguageCategories];
 	                editCategories = true;
 	                menu = "Edit";
 	            }
 	            if (GUILayout.Button("Delete", GUILayout.MaxWidth(150)))
 	            {
-					if(EditorUtility.DisplayDialog("Delete Language", string.Format(@"Are you sure you want to delete the {0} language and all data together?", polyglot.languages[selectedLanguage]), "Yes", "No"))
+                    if (polyglot.languagesCategories.Count == 0) return;
+                    if (EditorUtility.DisplayDialog("Delete Language", string.Format(@"Are you sure you want to delete the {0} language and all data together?", polyglot.languages[selectedLanguage]), "Yes", "No"))
 	                {
 	                    RemoveCategorie();
 	                }
@@ -282,7 +302,7 @@ namespace Polyglot.Editor
 	                    t.translation = GUILayout.TextField(t.translation, GUILayout.MaxWidth(tam));
 
                         // Changes the brother element in the other languages and get the brother
-                        Translation brotherElement = ChangeIdAnotherLanguage(t.idUniqueElements, t.nameID);
+                        List<Translation> brotherElements = ChangeIdAnotherLanguage(t.idUniqueElements, t.nameID);
 
                         // If you click the button to delete the translation
                         if (GUILayout.Button("\u00D7", GUILayout.MaxWidth(30)))
@@ -292,8 +312,12 @@ namespace Polyglot.Editor
 	                        {
 								polyglot.translations.RemoveAt(i); // Remove translation
                                 polyglot.DisableIdElement(t.idUniqueElements); // Disable id brother
-                                if (brotherElement != null)
-                                    polyglot.translations.Remove(brotherElement); // Delete brother element
+                                if (brotherElements != null) {
+                                    foreach(Translation tb in brotherElements) {
+                                        polyglot.translations.Remove(tb); // Delete brother element
+                                    }
+                                }
+                                   
 	                        }
 	                    }
 	                    GUILayout.EndHorizontal();
@@ -347,8 +371,9 @@ namespace Polyglot.Editor
 	    }
 
         // Changes the brother element in the other languages and get the brother
-        Translation ChangeIdAnotherLanguage(int idUniqueElements, string nameIDBrotherLanguage)
+        List<Translation> ChangeIdAnotherLanguage(int idUniqueElements, string nameIDBrotherLanguage)
 	    {
+            List<Translation> brotherElementsList = new List<Translation>();
             // Scroll through the translations list
             foreach (Translation t in polyglot.translations)
 	        {
@@ -363,14 +388,14 @@ namespace Polyglot.Editor
 	                    {
                             // Change the name of the brother element
                             t.nameID = nameIDBrotherLanguage;
-                            // Return brother element
-                            return t;
-	                    }
+                            brotherElementsList.Add(t);
+
+                        }
 	                }
 	            }
 	        }
-            // If it does not exist, return null
-            return null;
+            // Return all brothers
+            return brotherElementsList;
 	    }
 
         // Check if a unique id(Compatibility) is free
@@ -472,6 +497,18 @@ namespace Polyglot.Editor
 			polyglot.selectedLanguage = this.selectedLanguage;
 			polyglot.selectedLanguageCategories = this.selectedLanguageCategories;
 	    }
+        
+        int FindIndexLanguageByName(string name) {
+            int i = 0;
+            foreach(string l in polyglot.languages) {
+                if(l == name)
+                    return i;
 
+                i++;
+            }
+
+            return -1;
+        }
+        
     }
 }
