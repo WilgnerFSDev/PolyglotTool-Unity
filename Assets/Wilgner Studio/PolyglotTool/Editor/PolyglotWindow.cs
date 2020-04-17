@@ -30,7 +30,7 @@ namespace Polyglot.Editor
         #region Categories Variables
         private bool newCategories = false; // Is New Categories
         private bool editCategories = false; // Edit mode
-        private string nameCategorie = "New Categorie"; // Name of new or edit categorie
+        private string nameCategorie = "New Category"; // Name of new or edit categorie
         #endregion
 
         // Save/Load data in ScriptableObject (PolyglotSave)
@@ -129,7 +129,7 @@ namespace Polyglot.Editor
 
 	        #region Language Categories/Translations
 	        GUILayout.BeginVertical("Box");
-	        GUILayout.Label("Categorioes", EditorStyles.boldLabel);
+	        GUILayout.Label("Categories", EditorStyles.boldLabel);
 	        DrawCategoriesTranslations();
 	        GUILayout.EndVertical();
             #endregion
