@@ -1,0 +1,12 @@
+{
+  "name": "com.wilgnerfsdev.polyglottool",
+  "displayName": "PolyglotTool",
+  "version": "1.0.0",
+  "unity": "2018.1",
+  "description": "Free translation tool for Unity",
+  "type": "tool",
+  "samples": [
+    {
+    }
+  ]
+}
